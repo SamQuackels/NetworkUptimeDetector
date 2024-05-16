@@ -6,11 +6,8 @@ import signal
 from time import gmtime
 from subprocess import DEVNULL
 
-directory = "/NetworkUptimeDetector"
-directoryFile = "/NetworkUptimeDetector/log.txt"
-
-
-ended = False
+directory = os.path.abspath("C:/NetworkUpTimeDetector")
+directoryFile = os.path.abspath("C:/NetworkUpTimeDetector/log.txt")
 
 
 # Make folder if possible
@@ -19,7 +16,7 @@ if not os.path.exists(directory):
     os.makedirs(directory)
     print("Directory created successfully!")
 else:
-    print("Found directory!")
+    print("Found directory! : " + directory)
 
 # Make file if possible
 if not os.path.isfile(directoryFile):
@@ -30,7 +27,7 @@ if not os.path.isfile(directoryFile):
     f.write("Made on: 16/05/2024\n")
     f.write("|       Date       |       Time started       |       Time ended       |       Duration       |\n")
     f.close()
-    print("Log file created successfully!")
+    print("Log file created successfully! : " + directoryFile)
 else:
     print("Found log file!")
     
@@ -39,7 +36,7 @@ else:
 address = "8.8.8.8"
 ttl = "20"
 command = "ping " + address + " -i " + ttl + " -n 1"
-while not ended:
+while True:
     p = subprocess.Popen(command, stdout=DEVNULL)
     p.wait()
     code = (p.returncode)
@@ -51,7 +48,7 @@ while not ended:
         startTimeObject = datetime.now()
         
         print("Lost connection at : " + startTime)
-        while code == 1 and not ended:
+        while code == 1 :
             p = subprocess.Popen(command, stdout=DEVNULL)
             p.wait()
             code = (p.returncode)
